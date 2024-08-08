@@ -44,7 +44,7 @@ export default function Login() {
       password: password,
     };
 
-    axios.post("http://192.168.1.6:5000/api/auth/Login", userData)
+    axios.post("http://172.20.10.2:5000/api/auth/Login", userData)
       .then(res => {
         console.log(res.data);
         if (res.data.status === "ok") {
