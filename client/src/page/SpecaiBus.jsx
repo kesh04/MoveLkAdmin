@@ -1,14 +1,16 @@
+import React, { useState, useLayoutEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-import React, { useState, useRef, useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import Textarea from "react-native-textarea";
+import { TextInput as PaperTextInput } from "react-native-paper";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SpecaiBus() {
   const navigation = useNavigation();
@@ -31,55 +33,113 @@ export default function SpecaiBus() {
 
   const [Oname, setOName] = useState("");
   const [busName, setBusName] = useState("");
-  const [location, setblocation] = useState("");
+  const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
   const [Des, setDes] = useState("");
+
+  const handleAddBus = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        Alert.alert("Error", "No authentication token found");
+        return;
+      }
+
+      const response = await axios.post(
+        "http://192.168.1.6:5000/api/auth/addBus",
+        {
+          Busname: busName,
+          OwnerName: Oname,
+          Phone: phone,
+          location,
+          descripe: Des,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        Alert.alert("Success", "Bus added successfully");
+        // Clear input fields after successful addition
+
+
+        console.log(token);
+        
+        setOName("");
+        setBusName("");
+        setLocation("");
+        setPhone("");
+        setDes("");
+      } else {
+        Alert.alert("Error", response.data.error || "Failed to add bus");
+      }
+    } catch (error) {
+      console.error("Error adding bus:", error);
+      Alert.alert(
+        "Error",
+        error.response?.data?.error || "An unexpected error occurred"
+      );
+    }
+  };
 
   return (
     <View>
       <ScrollView>
         <View style={styles.header}>
-          <Text style={styles.subhedTitel}>Add Bus Route</Text>
+          <Text style={styles.subhedTitel}>Add Bus</Text>
         </View>
         <View style={styles.container}>
           <View style={styles.action}>
-            <TextInput
-              placeholder="BUS NAME"
+            <PaperTextInput
+              label="BUS NAME"
               value={busName}
-              onChange={(e) => setBusName(e.nativeEvent.text)}
+              onChangeText={text => setBusName(text)}
               style={styles.textInput}
             />
           </View>
           <View style={styles.action}>
-            <TextInput placeholder="OWNER NAME" 
-            value={Oname}
-              onChange={e => setOName(e.nativeEvent.text)}
-            style={styles.textInput} />
+            <PaperTextInput
+              label="OWNER NAME"
+              value={Oname}
+              onChangeText={text => setOName(text)}
+              style={styles.textInput}
+            />
           </View>
           <View style={styles.action}>
-            <TextInput placeholder="LOCATION" 
-            value={location}
-              onChange={e => setblocation(e.nativeEvent.text)}
-            style={styles.textInput} />
+            <PaperTextInput
+              label="LOCATION"
+              value={location}
+              onChangeText={text => setLocation(text)}
+              style={styles.textInput}
+            />
           </View>
           <View style={styles.action}>
-            <TextInput placeholder="PHONE NUMBER" style={styles.textInput}  value={phone} onChange={e => setPhone(e.nativeEvent.text)}/>
+            <PaperTextInput
+              label="PHONE NUMBER"
+              value={phone}
+              onChangeText={text => setPhone(text)}
+              style={styles.textInput}
+            />
           </View>
           <View style={styles.container}>
-            <Textarea
-              containerStyle={styles.textareaContainer}
+            <PaperTextInput
+              label="DESCRIPTION"
+              multiline
+              numberOfLines={3}
+              value={Des}
+              onChangeText={text => setDes(text)}
               style={styles.textarea}
               maxLength={120}
-              value={Des}
-              onChange={e => setDes(e.nativeEvent.text)}
-              placeholder="description"
-              placeholderTextColor="gray"
+              mode="outlined"
             />
           </View>
         </View>
-
         <View style={styles.button}>
-          <TouchableOpacity style={styles.inBut}>
+          <TouchableOpacity onPress={handleAddBus} style={styles.inBut}>
             <View>
               <Text style={styles.textSign}>ADD</Text>
             </View>
@@ -98,20 +158,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 4,
   },
-
-  textareaContainer: {
-    height: 180,
-    padding: 5,
-
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 5,
-  },
   textarea: {
-    textAlignVertical: "top", // hack android
-    height: 170,
+    textAlignVertical: "top",
     fontSize: 14,
     color: "#333",
+    backgroundColor: "#f0f0f0",
   },
   container: {
     flex: 1,
@@ -119,21 +170,16 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   action: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     marginBottom: 16,
-    paddingBottom: 5,
     marginTop: 15,
     margin: 10,
   },
   textInput: {
-    flex: 1,
     height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginHorizontal: 5,
+    marginVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 8,
+    backgroundColor: "#f0f0f0",
   },
   inBut: {
     width: "70%",
@@ -146,12 +192,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 20,
-    alignItems: "center",
-    textAlign: "center",
     margin: 20,
-  },
-  hedTitel: {
-    fontSize: 33,
   },
   subhedTitel: {
     fontSize: 20,
@@ -159,3 +200,4 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
 });
+ 

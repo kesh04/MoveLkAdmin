@@ -1,8 +1,6 @@
-
 const mongoose = require('mongoose');
 
 const SPBusSchema = new mongoose.Schema({
-    
     Busname: {
         type: String,
         required: true
@@ -11,12 +9,11 @@ const SPBusSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-   
     Phone: {
         type: String,
         required: true
     },
-     location: {
+    location: {
         type: String,
         required: true,
         unique: true
@@ -24,7 +21,8 @@ const SPBusSchema = new mongoose.Schema({
     descripe: {
         type: String,
         required: true
-    }
+    },
+  
 });
 
 module.exports = mongoose.model('SpecailBus', SPBusSchema);
