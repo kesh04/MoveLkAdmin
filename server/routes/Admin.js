@@ -12,3 +12,4 @@ router.post('/logout', logout);
 router.post('/', deleteUser);
 
 module.exports = router;
+ 
