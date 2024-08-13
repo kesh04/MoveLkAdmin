@@ -69,8 +69,6 @@ export default function SignUp() {
   };
 
   const handleSignUp = () => {
-   
-
     const userData= {
       UserName: name,
       Busname: busName,
@@ -90,14 +88,13 @@ export default function SignUp() {
           Alert.alert(JSON.stringify(res.data))
         }
       })
-     
       .catch(e=>console.log(e)) 
     }
     else{
       Alert.alert("Fill datails ")
     }
-    
   };
+
 
   const handleLogin = () => {
     navigation.navigate("Login");

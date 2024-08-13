@@ -32,7 +32,12 @@ const RouteBus = new mongoose.Schema({
     Nextdeparture: {
         type: String,
         required: true
-    }
+    },
+    adminId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UserDetails',
+        required: true
+    },
 });
 
-module.exports = mongoose.model('RouteBus', RouteBusShema);
+module.exports = mongoose.model('RouteBusShema', RouteBus);

@@ -10,7 +10,11 @@ import SpecaiBus from "../page/SpecaiBus";
 const Tab = () => {
     const Tab = createBottomTabNavigator(); 
     return (
-        <Tab.Navigator screenOptions={{ headerShown: false  } }>
+      <Tab.Navigator screenOptions={{
+        tabBarOptions: {
+          showLabel: false,
+        },
+      }}>
         <Tab.Screen
           name="Home"
           component={Main}

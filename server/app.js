@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const Admin = require("./routes/Admin")
 const mongoUrl = "mongodb+srv://keshana004:admin@cluster0.fcc8ic8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 const cors = require('cors');
-
+const UserAdmin = require("./routes/userAdmin")
 const app = express();
 
 app.use(cors());
@@ -16,6 +16,7 @@ app.get("/", (req,res)=>{
 app.use(bodyParser.json());
 
 app.use("/api/auth", Admin);
+app.use("/api/auth", UserAdmin)
 
 
 mongoose.connect(mongoUrl).then(() =>{
