@@ -15,7 +15,7 @@ const ViewSBus = () => {
                 if (!token) {
                     throw new Error('Token does not exist');
                 }
-                const response = await axios.get('http://192.168.1.6:5000/api/auth/buses', {
+                const response = await axios.get('http://192.168.1.122:5000/api/auth/buses', {
                     headers: {
                         'auth-token': token,
                     },
@@ -32,6 +32,24 @@ const ViewSBus = () => {
         fetchBuses();
     }, []);
     
+    const deleteBus = async (id) => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                throw new Error('Token does not exist');
+            }
+            await axios.delete(`http://192.168.1.122:5000/api/auth/buses/${id}`, {
+                headers: {
+                    'auth-token': token,
+                },
+            });
+            // Remove the deleted bus from the state
+            setBuses(buses.filter(bus => bus._id !== id));
+        } catch (error) {
+            console.error("Error deleting bus:", error);
+            setError(error.message || 'Failed to delete bus');
+        }
+    };
     return (
         <View style={styles.container}>
             <FlatList
@@ -44,7 +62,7 @@ const ViewSBus = () => {
                         <Text>{item.Phone}</Text>
                         <Text>{item.location}</Text>
                         <Text>{item.descripe}</Text>
-                         <Button title='delete' onPress={()=>{}}/>                   
+                        <Button title='Delete' onPress={() => deleteBus(item._id)} />                  
                                         </View>
                 )}
             />

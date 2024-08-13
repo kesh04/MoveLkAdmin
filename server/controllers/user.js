@@ -4,129 +4,129 @@
 
 // const JWT_SECRET = "keshanabatman";
 
-
-
-// // Define the middleware for verifying JWT tokens
+// // Middleware for verifying JWT tokens
 // const authenticateToken = (req, res, next) => {
 //   const token = req.header("auth-token");
-//   if (!token) return res.status(401).send({ error: "Access Denied" });
+//   if (!token) return res.status(401).json({ error: "Access Denied" });
 
 //   try {
-//       const verified = jwt.verify(token, JWT_SECRET);
-//       req.user = verified; // Store the verified token payload in req.user
-//       next();
+//     const verified = jwt.verify(token, JWT_SECRET);
+//     req.user = verified; // Store the verified token payload in req.user
+//     next();
 //   } catch (error) {
-//       res.status(400).send({ error: "Invalid Token" });
+//     res.status(400).json({ error: "Invalid Token" });
 //   }
 // };
 
-
+// // Fetch all users
 // const getAllUsers = async (req, res) => {
-//     try {
-//         const users = await Admin.find({});
-//         res.send({ status: "ok", data: users });
-//     } catch (error) {
-//         res.status(400).json({ error: error.message });
-//     }
+//   try {
+//     const users = await Admin.find({});
+//     res.json({ status: "ok", data: users });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
 // };
 
+// // Add a new user
 // const adduser = async (req, res) => {
-//   const { UserName, Busname, Phone, BusNumber, password } = req.body;
+//   const { UserName, Busname, Phone, BusNumber, To, where, arrival, departure, Nextarrival, Nextdeparture, password } = req.body;
 
-//   const oldUser = await Admin.findOne({ BusNumber: BusNumber });
-//   if (oldUser) {
-//     return res.send({ data: "user already exists" });
+//   if (!UserName || !Busname || !Phone || !BusNumber || !password) {
+//     return res.status(400).json({ error: "All fields are required" });
 //   }
 
-//   const encprtyPw = await bcrypt.hash(password, 10);
+//   const oldUser = await Admin.findOne({ BusNumber });
+//   if (oldUser) {
+//     return res.status(400).json({ error: "User already exists" });
+//   }
+
 //   try {
+//     const encprtyPw = await bcrypt.hash(password, 10);
 //     await Admin.create({
 //       UserName,
 //       Busname,
 //       Phone,
 //       BusNumber,
+//       To,
+//       where,
+//       arrival,
+//       departure,
+//       Nextarrival,
+//       Nextdeparture,
 //       password: encprtyPw,
 //     });
-//     res.send({ status: "ok", data: "user created" });
+//     res.json({ status: "ok", data: "User created" });
 //   } catch (error) {
 //     res.status(400).json({ error: error.message });
 //   }
 // };
 
+// // Login a user
 // const loginuser = async (req, res) => {
 //   const { BusNumber, password } = req.body;
-//   const Users = await Admin.findOne({ BusNumber: BusNumber });
-//   if (!Users) {
-//     return res.send({ data: "user doesn not exits" });
-//   }
-//   if (await bcrypt.compare(password, Users.password)) {
-//     const token = jwt.sign({ BusNumber: Users.BusNumber }, JWT_SECRET);
 
-//     if (res.status(201)) {
-//       return res.send({ status: "ok", data: token });
-//     } else {
-//       return res.send({ error: "error" });
-//     }
+//   if (!BusNumber || !password) {
+//     return res.status(400).json({ error: "BusNumber and password are required" });
 //   }
+
+//   const user = await Admin.findOne({ BusNumber });
+//   if (!user) {
+//     return res.status(400).json({ error: "User does not exist" });
+//   }
+
+//   const match = await bcrypt.compare(password, user.password);
+//   if (!match) {
+//     return res.status(400).json({ error: "Invalid credentials" });
+//   }
+
+//   const token = jwt.sign({ BusNumber: user.BusNumber }, JWT_SECRET);
+//   res.json({ status: "ok", data: token });
 // };
 
+// // Fetch user data
 // const userData = async (req, res) => {
 //   const { token } = req.body;
+
+//   if (!token) {
+//     return res.status(400).json({ error: "Token is required" });
+//   }
+
 //   try {
 //     const user = jwt.verify(token, JWT_SECRET);
 //     const userBusNumber = user.BusNumber;
 
-//     Admin.findOne({ BusNumber: userBusNumber }).then((data) => {
-//       return res.send({ status: "ok", data: data });
-//     });
+//     const data = await Admin.findOne({ BusNumber: userBusNumber });
+//     res.json({ status: "ok", data });
 //   } catch (error) {
-//     return res.send({ error: "error" });
+//     res.status(400).json({ error: "Invalid token" });
 //   }
 // };
 
+// // Logout a user
 // const logout = async (req, res) => {
-//     const { token } = req.body;
-//     // Optionally implement token blacklist logic here if needed.
-//     return res.send({ status: "ok", data: "user logged out" });
+//   // Implement token blacklist logic here if needed
+//   res.json({ status: "ok", data: "User logged out" });
 // };
 
+// // Delete a user
 // const deleteUser = async (req, res) => {
-//     const { token } = req.body;
-//     try {
-//         const user = jwt.verify(token, JWT_SECRET);
-//         const userBusNumber = user.BusNumber;
+//   const { token } = req.body;
 
-//         await Admin.deleteOne({ BusNumber: userBusNumber });
-//         return res.send({ status: "ok", data: "user deleted" });
-//     } catch (error) {
-//         return res.send({ error: "error" });
-//     }
-// };
-
-
-// // Define the function to add a bus
-// const addBus = async (req, res) => {
-//   const { Busname, OwnerName, Phone, location, descripe } = req.body;
-
-//   // Create a new bus entry
-//   const newBus = new SpecailBus({
-//     Busname,
-//     OwnerName,
-//     Phone,
-//     location,
-//     descripe,
-//   });
+//   if (!token) {
+//     return res.status(400).json({ error: "Token is required" });
+//   }
 
 //   try {
-//     // Save the bus to the database
-//     await newBus.save();
-//     res.send({ status: "ok", data: "bus added" });
+//     const user = jwt.verify(token, JWT_SECRET);
+//     const userBusNumber = user.BusNumber;
+
+//     await Admin.deleteOne({ BusNumber: userBusNumber });
+//     res.json({ status: "ok", data: "User deleted" });
 //   } catch (error) {
-//     res.status(400).json({ error: error.message });
+//     res.status(400).json({ error: "Invalid token" });
 //   }
 // };
-
-
 
 // module.exports = {
 //   adduser,
@@ -134,8 +134,9 @@
 //   userData,
 //   deleteUser,
 //   logout,
-//   getAllUsers
+//   getAllUsers,
 // };
+
 
 
 const Admin = require("../models/UserDeatiils");
@@ -144,17 +145,17 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = "keshanabatman";
 
-// Define the middleware for verifying JWT tokens
+// Middleware for verifying JWT tokens
 const authenticateToken = (req, res, next) => {
   const token = req.header("auth-token");
-  if (!token) return res.status(401).send({ error: "Access Denied" });
+  if (!token) return res.status(401).json({ error: "Access Denied" });
 
   try {
     const verified = jwt.verify(token, JWT_SECRET);
     req.user = verified; // Store the verified token payload in req.user
     next();
   } catch (error) {
-    res.status(400).send({ error: "Invalid Token" });
+    res.status(400).json({ error: "Invalid Token" });
   }
 };
 
@@ -162,7 +163,7 @@ const authenticateToken = (req, res, next) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await Admin.find({});
-    res.send({ status: "ok", data: users });
+    res.json({ status: "ok", data: users });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -170,23 +171,33 @@ const getAllUsers = async (req, res) => {
 
 // Add a new user
 const adduser = async (req, res) => {
-  const { UserName, Busname, Phone, BusNumber, password } = req.body;
+  const { UserName, Busname, Phone, BusNumber, To, Where, arrival, departure, Nextarrival, Nextdeparture, password } = req.body;
 
-  const oldUser = await Admin.findOne({ BusNumber: BusNumber });
-  if (oldUser) {
-    return res.send({ data: "user already exists" });
+  if (!UserName || !Busname || !Phone || !BusNumber || !password) {
+    return res.status(400).json({ error: "All fields are required" });
   }
 
-  const encprtyPw = await bcrypt.hash(password, 10);
+  const oldUser = await Admin.findOne({ BusNumber });
+  if (oldUser) {
+    return res.status(400).json({ error: "User already exists" });
+  }
+
   try {
+    const encprtyPw = await bcrypt.hash(password, 10);
     await Admin.create({
       UserName,
       Busname,
       Phone,
       BusNumber,
+      To,
+      Where,
+      arrival,
+      departure,
+      Nextarrival,
+      Nextdeparture,
       password: encprtyPw,
     });
-    res.send({ status: "ok", data: "user created" });
+    res.json({ status: "ok", data: "User created" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -195,58 +206,68 @@ const adduser = async (req, res) => {
 // Login a user
 const loginuser = async (req, res) => {
   const { BusNumber, password } = req.body;
-  const Users = await Admin.findOne({ BusNumber: BusNumber });
-  if (!Users) {
-    return res.send({ data: "user doesn not exits" });
-  }
-  if (await bcrypt.compare(password, Users.password)) {
-    const token = jwt.sign({ BusNumber: Users.BusNumber }, JWT_SECRET);
 
-    if (res.status(201)) {
-      return res.send({ status: "ok", data: token });
-    } else {
-      return res.send({ error: "error" });
-    }
+  if (!BusNumber || !password) {
+    return res.status(400).json({ error: "BusNumber and password are required" });
   }
+
+  const user = await Admin.findOne({ BusNumber });
+  if (!user) {
+    return res.status(400).json({ error: "User does not exist" });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    return res.status(400).json({ error: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ BusNumber: user.BusNumber }, JWT_SECRET);
+  res.json({ status: "ok", data: token });
 };
 
 // Fetch user data
 const userData = async (req, res) => {
   const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
   try {
     const user = jwt.verify(token, JWT_SECRET);
     const userBusNumber = user.BusNumber;
 
-    Admin.findOne({ BusNumber: userBusNumber }).then((data) => {
-      return res.send({ status: "ok", data: data });
-    });
+    const data = await Admin.findOne({ BusNumber: userBusNumber });
+    res.json({ status: "ok", data });
   } catch (error) {
-    return res.send({ error: "error" });
+    res.status(400).json({ error: "Invalid token" });
   }
 };
 
 // Logout a user
 const logout = async (req, res) => {
-  const { token } = req.body;
-  // Optionally implement token blacklist logic here if needed.
-  return res.send({ status: "ok", data: "user logged out" });
+  // Implement token blacklist logic here if needed
+  res.json({ status: "ok", data: "User logged out" });
 };
 
 // Delete a user
 const deleteUser = async (req, res) => {
   const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
   try {
     const user = jwt.verify(token, JWT_SECRET);
     const userBusNumber = user.BusNumber;
 
     await Admin.deleteOne({ BusNumber: userBusNumber });
-    return res.send({ status: "ok", data: "user deleted" });
+    res.json({ status: "ok", data: "User deleted" });
   } catch (error) {
-    return res.send({ error: "error" });
+    res.status(400).json({ error: "Invalid token" });
   }
 };
-
-
 
 module.exports = {
   adduser,
@@ -254,5 +275,5 @@ module.exports = {
   userData,
   deleteUser,
   logout,
-  getAllUsers
+  getAllUsers,
 };

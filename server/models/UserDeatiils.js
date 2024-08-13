@@ -22,6 +22,33 @@ const UserDetailSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    To: {
+        type: String,
+        required: true
+    },
+   
+    Where: {
+        type: String,
+        required: true
+    },
+    arrival: {
+        type: String,
+        required: true,
+     
+    },
+    departure : {
+        type: String,
+        required: true
+    },
+     Nextarrival: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    Nextdeparture: {
+        type: String,
+        required: true
     }
 });
 

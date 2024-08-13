@@ -46,7 +46,7 @@ export default function SpecaiBus() {
       }
 
       const response = await axios.post(
-        "http://192.168.1.6:5000/api/auth/addBus",
+        "http://192.168.1.122:5000/api/auth/addBus",
         {
           Busname: busName,
           OwnerName: Oname,
@@ -137,6 +137,7 @@ export default function SpecaiBus() {
               mode="outlined"
             />
           </View>
+          
         </View>
         <View style={styles.button}>
           <TouchableOpacity onPress={handleAddBus} style={styles.inBut}>

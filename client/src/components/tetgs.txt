@@ -358,7 +358,7 @@
 //   const [busnumber, setbusnumber] = useState("");
 //   const [password, setPassword] = useState("");
 //   const [phone, setPhone] = useState("");
-//   const [to, setTo] = useState("");
+//   const [To, setTo] = useState("");
 //   const [where, setWhere] = useState("");
 //   const [Arr, setArr] = useState("");
 //   const [Dep, setDEp] = useState("");
@@ -411,15 +411,9 @@
 //       BusNumber: busnumber,
 //       password: password,
 //       Phone: phone,
-//       To: to,
-//       Where: where,
-//       ArrivalTime: Arr,
-//       DepartTime: Dep,
-//       NextArrivalTime: NeArr,
-//       NextDepartTime: NeDep,
 //     }
 //     if (nameVerify && busNameVerify && busnumberlVerify && passwordVerify && phoneVerify) {
-//       axios.post("http://172.20.10.2:5000/api/auth/register", userData)
+//       axios.post("http://192.168.1.122:5000/api/auth/register", userData)
 //         .then((res) => {
 //           console.log(res.data)
 
@@ -546,7 +540,7 @@
 //                   onChangeText={handlePhoneChange}
 //                   maxLength={10}
 //                   ref={phoneInputRef}
-                 
+//                   onSubmitEditing={Keyboard.dismiss}
 //                    mode="outlined"
 //                 />
 //               </View>
@@ -555,9 +549,67 @@
 //                   Phone number must be exactly 10 digits
 //                 </Text>
 //               )}
-             
+//               <View style={styles.action}>
+//               <PaperTextInput
+//                 label="TO"
+//                 value={To}
+//                 onChangeText={text => setTo(text)}
+//                 style={styles.textInput}
+//                  mode="outlined"
+                
+//               />
             
-          
+//             </View>
+//               <View style={styles.action}>
+//               <PaperTextInput
+//                 label="Where"
+//                 value={where}
+//                 onChangeText={text => setWhere(text)}
+//                 style={styles.textInput}
+//                  mode="outlined"
+              
+//               />
+//             </View>
+//             <View style={styles.action}>
+//               <PaperTextInput
+//                 label="Arrival time"
+//                 value={Arr}
+//                 onChangeText={text => setArr(text)}
+//                 style={styles.textInput}
+                
+//               />
+            
+//             </View>
+//             <View style={styles.action}>
+              
+//               <PaperTextInput
+//                 label="Depart time"
+//                 value={Dep}
+//                 onChangeText={text => setDEp(text)}
+//                 style={styles.textInput}
+                
+//               />
+//             </View>
+//             <View style={styles.action}>
+//               <PaperTextInput
+//                 label="Next Arrival time"
+//                 value={NeArr}
+//                 onChangeText={text => setNeArr(text)}
+//                 style={styles.textInput}
+                
+//               />
+              
+//             </View> 
+//             <View style={styles.action}>
+            
+//               <PaperTextInput
+//                 label="Next Depart time"
+//                 value={NeDep}
+//                 onChangeText={text => setNeDep(text)}
+//                 style={styles.textInput}
+                
+//               />
+//             </View>
 
 //               <TouchableOpacity onPress={handleLogin}>
 //                 <View style={{ justifyContent: "flex-end", alignItems: "flex-end", marginTop: 8, marginRight: 10 }}>
@@ -670,7 +722,7 @@ export default function SignUp() {
   const [busnumber, setbusnumber] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-  const [to, setTo] = useState("");
+  const [To, setTo] = useState("");
   const [where, setWhere] = useState("");
   const [Arr, setArr] = useState("");
   const [Dep, setDEp] = useState("");
@@ -768,12 +820,12 @@ export default function SignUp() {
       BusNumber: busnumber,
       password: password,
       Phone: phone,
-      To: to,
+      To: To,
       Where: where,
-      arrival: Arr,
-      departure: Dep,
-      Nextarrival: NeArr,
-      Nextdeparture: NeDep,
+      ArrivalTime: Arr,
+      DepartTime: Dep,
+      NextArrivalTime: NeArr,
+      NextDepartTime: NeDep,
     };
   
     if (
@@ -789,7 +841,7 @@ export default function SignUp() {
       neArrVerify &&
       neDepVerify
     ) {
-      axios.post("http://192.168.1.122:5000/api/auth/register", userData)
+      axios.post("http://172.20.10.2:5000/api/auth/register", userData)
         .then((res) => {
           if (res.data.status === "ok") {
             Alert.alert("Registration Successful");
@@ -932,14 +984,14 @@ export default function SignUp() {
                   style={styles.textInput}
                   returnKeyType="next"
                   blurOnSubmit={false}
-                  value={to}
+                  value={To}
                   onChangeText={handleToChange}
                   ref={toInputRef}
                   mode="outlined"
                   onSubmitEditing={() => whereInputRef.current.focus()}
                 />
               </View>
-              {to.length > 0 && !toVerify && (
+              {To.length > 0 && !toVerify && (
                 <Text style={{ marginLeft: 20, color: "red" }}>
                   Please enter a valid destination
                 </Text>
@@ -1041,9 +1093,9 @@ export default function SignUp() {
               <View style={{ alignItems: "center" }}>
                 <TouchableOpacity
                   onPress={handleSignUp}
-                  style={styles.inBut}
+                  style={[styles.signUp, { backgroundColor: "black" }]}
                 >
-                  <Text style={styles.textSign}>Register</Text>
+                  <Text style={styles.signUpText}>Register</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.bottom}>
@@ -1073,7 +1125,7 @@ const styles = StyleSheet.create({
     paddingBottom: 4,
   },
   footer: {
-    flex: 4,
+    flex: 3,
     backgroundColor: "white",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -1102,18 +1154,18 @@ const styles = StyleSheet.create({
     color: "black",
     backgroundColor: "white",
   },
-  inBut: {
-    width: '70%',
-    backgroundColor: '#ECED04',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderRadius: 8,
+  signUp: {
+    width: "80%",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
+    marginTop: 30,
   },
-  textSign: {
+  signUpText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "black",
+    color: "white",
   },
   bottom: {
     flexDirection: "row",
@@ -1122,3 +1174,142 @@ const styles = StyleSheet.create({
   },
 });
 
+
+const Admin = require("../models/UserDeatiils");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = "keshanabatman";
+
+// Middleware for verifying JWT tokens
+const authenticateToken = (req, res, next) => {
+  const token = req.header("auth-token");
+  if (!token) return res.status(401).json({ error: "Access Denied" });
+
+  try {
+    const verified = jwt.verify(token, JWT_SECRET);
+    req.user = verified; // Store the verified token payload in req.user
+    next();
+  } catch (error) {
+    res.status(400).json({ error: "Invalid Token" });
+  }
+};
+
+// Fetch all users
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await Admin.find({});
+    res.json({ status: "ok", data: users });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Add a new user
+const adduser = async (req, res) => {
+  const { UserName, Busname, Phone, BusNumber, To, where, arrival, departure, Nextarrival, Nextdeparture, password } = req.body;
+
+  if (!UserName || !Busname || !Phone || !BusNumber || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  const oldUser = await Admin.findOne({ BusNumber });
+  if (oldUser) {
+    return res.status(400).json({ error: "User already exists" });
+  }
+
+  try {
+    const encprtyPw = await bcrypt.hash(password, 10);
+    await Admin.create({
+      UserName,
+      Busname,
+      Phone,
+      BusNumber,
+      To,
+      where,
+      arrival,
+      departure,
+      Nextarrival,
+      Nextdeparture,
+      password: encprtyPw,
+    });
+    res.json({ status: "ok", data: "User created" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Login a user
+const loginuser = async (req, res) => {
+  const { BusNumber, password } = req.body;
+
+  if (!BusNumber || !password) {
+    return res.status(400).json({ error: "BusNumber and password are required" });
+  }
+
+  const user = await Admin.findOne({ BusNumber });
+  if (!user) {
+    return res.status(400).json({ error: "User does not exist" });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) {
+    return res.status(400).json({ error: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ BusNumber: user.BusNumber }, JWT_SECRET);
+  res.json({ status: "ok", data: token });
+};
+
+// Fetch user data
+const userData = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const userBusNumber = user.BusNumber;
+
+    const data = await Admin.findOne({ BusNumber: userBusNumber });
+    res.json({ status: "ok", data });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid token" });
+  }
+};
+
+// Logout a user
+const logout = async (req, res) => {
+  // Implement token blacklist logic here if needed
+  res.json({ status: "ok", data: "User logged out" });
+};
+
+// Delete a user
+const deleteUser = async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
+
+  try {
+    const user = jwt.verify(token, JWT_SECRET);
+    const userBusNumber = user.BusNumber;
+
+    await Admin.deleteOne({ BusNumber: userBusNumber });
+    res.json({ status: "ok", data: "User deleted" });
+  } catch (error) {
+    res.status(400).json({ error: "Invalid token" });
+  }
+};
+
+module.exports = {
+  adduser,
+  loginuser,
+  userData,
+  deleteUser,
+  logout,
+  getAllUsers,
+};

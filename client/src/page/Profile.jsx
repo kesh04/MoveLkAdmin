@@ -29,7 +29,7 @@ export default function Profile() {
   async function getdata (){
     const token = await AsyncStorage.getItem('token')
     // console.log(token);
-    axios.post("http://192.168.1.6:5000/api/auth/user", {token:token})
+    axios.post("http://192.168.1.122:5000/api/auth/user", {token:token})
     .then(res=> { 
       // console.log(res.data)
          setUsers(res.data.data)
@@ -52,7 +52,7 @@ export default function Profile() {
                 text: "OK",
                 onPress: async () => {
                   const token = await AsyncStorage.getItem('token');
-                  await axios.post("http://192.168.1.6:5000/api/auth/logout", { token });
+                  await axios.post("http://192.168.1.122:5000/api/auth/logout", { token });
                   await AsyncStorage.removeItem('token');
                   navigation.navigate('Login');
                 }
@@ -76,7 +76,7 @@ export default function Profile() {
           text: "Delete",
           onPress: async () => {
             const token = await AsyncStorage.getItem('token');
-            axios.post("http://192.168.1.6:5000/api/auth/deleteUser", { token })
+            axios.post("http://192.168.1.122:5000/api/auth/deleteUser", { token })
               .then(async res => {
                 if (res.data.status === "ok") {
                   await AsyncStorage.removeItem('token');
