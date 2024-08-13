@@ -5,7 +5,7 @@ import Main from "../page/Home";
 import Profile from "../page/Profile";
 import { Entypo, FontAwesome, Fontisto } from "@expo/vector-icons";
 import { MaterialIcons } from '@expo/vector-icons';
-import add from "../page/Add"
+
 import SpecaiBus from "../page/SpecaiBus";
 const Tab = () => {
     const Tab = createBottomTabNavigator(); 
@@ -34,22 +34,7 @@ const Tab = () => {
             
           }}
         />
-          <Tab.Screen
-          name="Route"
-          component={add}
-          options={{
-            tabBarLabel: () => null,
-            headerShown: false,
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <MaterialIcons name="add-location" size={30} color="#FED339" />
-             
-              ) : (
-                <MaterialIcons name="add-location" size={30} color="#808080" />
-              ),
-            
-          }}
-        />
+          
         <Tab.Screen
           name="specail"
           component={SpecaiBus}

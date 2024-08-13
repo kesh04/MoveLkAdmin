@@ -30,33 +30,24 @@ const  showBus = async (req, res) => {
     }
 };
 
-// Create a single route per admin
-const createRoute = async (req, res) => {
-    const { Busname, To, where, arrival, departure, Nextarrival, Nextdeparture } = req.body;
-   
+const deleteBus = async (req, res) => {
+    const { id } = req.params;
 
     try {
-        // Check if the admin already has a route
-       
-        const newRoute = new RouteBus({
-            Busname,
-            To,
-            where,
-            arrival,
-            departure,
-            Nextarrival,
-            Nextdeparture,
-           
-        });
-
-        await newRoute.save();
-        res.send({ status: "ok", data: "route created" });
+        const result = await SpecailBus.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ error: 'Bus not found' });
+        }
+        res.send({ status: 'ok', data: 'bus deleted' });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
+
+
+
 module.exports = {
     addBus,
-    createRoute,showBus
+    showBus,deleteBus
 };

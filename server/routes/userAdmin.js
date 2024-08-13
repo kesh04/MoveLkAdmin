@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
-const { addBus, createRoute, showBus } = require('../controllers/admin');
+const { addBus,  showBus, deleteBus } = require('../controllers/admin');
 
 // Use the authenticateToken middleware for admin routes
 router.post('/addBus', authenticateToken, addBus);
-router.post('/createRoute', authenticateToken, createRoute);
+
 router.get('/buses', authenticateToken, showBus);
+router.delete('/buses/:id', authenticateToken, deleteBus);
 
 module.exports = router;
